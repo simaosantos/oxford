@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, tap, switchMap, finalize, map } from 'rxjs/operators'
+import { debounceTime, tap, switchMap, finalize, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { oxfordService } from '../oxford.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-word-search',
@@ -10,19 +12,20 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class WordSearchComponent implements OnInit {
-
+  searchWord = ''
+  definition: any;
   words = []
   filteredWords = []
-  searchWord = new FormControl('');
+  searchForm = new FormControl('');
   errorMessage = ''
   userWord = ''
   isLoading = false;
 
-  constructor(private https: HttpClient) {
+  constructor(private https: HttpClient, private oxfordservice: oxfordService, private router: Router, ) {
 
   }
   ngOnInit() {
-    this.searchWord.valueChanges
+    this.searchForm.valueChanges
       .pipe(
         debounceTime(500),
         tap(() => {
@@ -51,9 +54,30 @@ export class WordSearchComponent implements OnInit {
       });
   }
 
- public onClick(){
-   
- }
+  public async redirect(event: any) {
+    this.searchWord =  await event.target.value;
+    console.log('ola', this.searchWord)
+    this.oxfordservice.getWords(this.searchWord)
+      .then(
+         data => 
+         {
+           this.definition = data
+           this.router.navigate(['/definition', this.definition.id]);
+         },
+         err => console.log('Error finding word', err) 
+       
+      )
+
+
+      console.log('after')
+  //  console.log('definition', this.definition)
+  //  this.router.navigate(['/definition', this.definition.id]);
+
+    //let teste =
+    //this.http.getWords(this.searchWord)//.subscribe(data => console.log(data.json()))
+    //  console.log(teste)
+    //.subscribe(data => console.log('data', data))
+  }
 
 }
 

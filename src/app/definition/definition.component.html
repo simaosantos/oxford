@@ -1,0 +1,31 @@
+<div>
+
+    <div *ngIf="fullData">
+        <div>
+
+            <h2> Word:</h2>
+            <h4>{{resultsObj.word}} </h4>
+            <audio #audio [src]="audioSource"></audio>
+            <a (click)=play(audio)>
+                <i class="fa fa-volume-up" aria-hidden="true"></i>
+            </a>
+
+        </div>
+        <h2>Part of speech: </h2>
+        <h4>{{partOfSpeech}}</h4>
+        <h2>Pronunciation (phonetic spelling):</h2>
+        <h4>{{pronunciation}}</h4>
+
+        <h2>Definitions:</h2>
+        <div *ngFor="let def of definition | slice:0:3;">
+            <h4>{{def}}</h4>
+        </div>
+
+        <h2>Etymology:</h2>
+        <h4>{{etymology}}</h4>
+        <h2>Sentence example:</h2>
+        <h4>{{exampleSentence}}</h4>
+    </div>
+
+
+</div>
