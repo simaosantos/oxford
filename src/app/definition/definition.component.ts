@@ -34,7 +34,7 @@ export class DefinitionComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(routeParams => {
       this.currentWord = routeParams.id;
-      this.oxfordservice.getWords(routeParams.id).then(
+      this.oxfordservice.getWordInfo(routeParams.id).subscribe(
         data => {
           this.fullData = data;
           //console.log(this.fullData)
