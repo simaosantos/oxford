@@ -1,4 +1,5 @@
 export interface Definition {
+    
     word: string;
     partOfSpeech: string;
     pronunciation: string;

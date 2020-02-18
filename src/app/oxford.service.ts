@@ -6,8 +6,14 @@ import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class oxfordService {
-    constructor(private http: HttpClient) { }
-
+    constructor(private http: HttpClient, private definition: Definition) { }
+ 
+    public fullData;
+    public resultsObj = {
+        word: "",
+        language: ""
+    };
+    public lexicalEntries;
 
     getWordInfo(word: string): Observable<Definition[]> {
         return this.http.get<Definition[]>(`http://localhost:8000/?word=${word}`).pipe(
@@ -47,10 +53,10 @@ function updateData(data) {
 }
 
 function setPartofSpeech() {
-    this.partOfSpeech = this.lexicalEntries[0]['lexicalCategory']['text'];
+    this.definition.partOfSpeech = this.lexicalEntries[0]['lexicalCategory']['text'];
 }
 function setPronunciation() {
-    this.pronunciation = this.lexicalEntries[0]['pronunciations'][0]["phoneticSpelling"];
+    this.definition.pronunciation = this.lexicalEntries[0]['pronunciations'][0]["phoneticSpelling"];
 
 }
 function setAudioSource() {
@@ -59,7 +65,7 @@ function setAudioSource() {
         for (let i = 0; i < aux.length; i++) {
 
             if (aux[i].audioFile) {
-                this.audioSource = aux[i].audioFile;
+                this.definition.audioSource = aux[i].audioFile;
 
                 break;
             }
@@ -75,13 +81,13 @@ function setDefinitions() {
         // this.definition.push(aux['senses'][0]['definitions'][0]);
         aux.find(def => {
             if (def.definitions != undefined) {
-                this.definition.push(def.definitions)
+                this.definition.definition.push(def.definitions)
             }
         })
         if (this.definition.length == 0) {
             subsenses.find(def => {
                 if (def.definitions != undefined) {
-                    this.definition.push(def.definitions)
+                    this.definition.definition.push(def.definitions)
                 }
             })
         }
@@ -93,9 +99,9 @@ function setDefinitions() {
 function setEtymology() {
     try {
         if (this.lexicalEntries[0]['entries'][0]['etymologies']) {
-            this.etymology = this.lexicalEntries[0]['entries'][0]['etymologies'][0];
+            this.definition.etymology = this.lexicalEntries[0]['entries'][0]['etymologies'][0];
         }
-        else this.etymology = "sorry, no etymology available"
+        else this.definition.etymology = "sorry, no etymology available"
     } catch (error) {
         console.log("Error setting etymology", error)
     }
@@ -104,10 +110,10 @@ function setEtymology() {
 function setExample() {
     try {
         if (this.lexicalEntries[0]['entries'][0]['senses'][0]['examples']) {
-            this.exampleSentence = this.lexicalEntries[0]['entries'][0]['senses'][0]['examples'][0]['text'];
+            this.definition.exampleSentence = this.lexicalEntries[0]['entries'][0]['senses'][0]['examples'][0]['text'];
         }
         else if (this.lexicalEntries[0]['entries'][0]['senses'][0]['subsenses'][0]['examples'][0]['text']) {
-            this.exampleSentence = this.lexicalEntries[0]['entries'][0]['senses'][0]['subsenses'][0]['examples'][0]['text'];
+            this.definition.exampleSentence = this.lexicalEntries[0]['entries'][0]['senses'][0]['subsenses'][0]['examples'][0]['text'];
         }
     } catch (error) {
         console.log("Error setting example setence", error)

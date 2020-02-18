@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { oxfordService } from '../oxford.service'
+import { Definition } from '../definition';
 
 @Component({
   selector: 'app-definition',
@@ -10,29 +11,11 @@ import { oxfordService } from '../oxford.service'
 export class DefinitionComponent implements OnInit {
   currentWord: ''
   selectedId: string;
-  public partOfSpeech = '';
-  public fullData;
-  public resultsObj = {
-    word: "",
-    language: ""
-  };
-  public exampleSentence;
-  public etymology;
-  public definition = [];
-  public audioSource;
-  public pronunciation;
-  public lexicalEntries = [];
-  public residueRemoved = [];
-  public wordOrigin = '';
-  public varientForms = [];
-  public show = false;
-  public notes = [];
-  public antonyms = [];
-  public synonyms = [];
-  constructor(private route: ActivatedRoute, private oxfordservice: oxfordService) { }
+  fullData = 1;
+  constructor(private route: ActivatedRoute, private oxfordservice: oxfordService, public definition:Definition) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(routeParams => {
+  /*   this.route.params.subscribe(routeParams => {
       this.currentWord = routeParams.id;
       this.oxfordservice.getWordInfo(routeParams.id).subscribe(
         data => {
@@ -50,21 +33,17 @@ export class DefinitionComponent implements OnInit {
           console.log(error)
         }
       );
-    });
-  }
+    }); */
 
+  }
+/* 
   updateData(data) {
     if (data) {
       this.resultsObj = data.results['0'];
       this.lexicalEntries = this.resultsObj['lexicalEntries'];
     }
     else throw ('Error getting word defintion')
-    /*
-    
-        // Remove Residue data from the full data
-        this.residueRemoved = this.lexicalEntries.filter(
-          lexicalEntry => lexicalEntry.lexicalCategory !== 'Residual'
-        ); */
+  
   }
 
   setPartofSpeech() {
@@ -134,7 +113,7 @@ export class DefinitionComponent implements OnInit {
       console.log("Error setting example setence", error)
     }
 
-  }
+  } */
 
   play(audio) {
     audio.play(); // play audio on clicking speak icon
